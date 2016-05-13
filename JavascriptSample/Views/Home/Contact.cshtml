@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "KnockoutJS";
+}
+@section Scripts {
+    <script src="~/Scripts/knockout-3.4.0.js"></script>
+    <script src="~/Scripts/scriptKnockout.js"></script>
+}
+
+<h2>@ViewBag.Title</h2>
+<div>
+    <label>A:</label><span id="A" data-bind="text: result.countA()"></span>
+    <label>B:</label><span id="B" data-bind="text: result.countB()"></span>
+</div>
+<div data-bind="foreach: buttons">
+    <div class="btn-group btn-group-sm">
+        <button class="btn dropdown-toggle" data-toggle="dropdown" style="width:40px" data-bind="css: btnClass()">
+            <span data-bind="text: name()"></span> <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" style="min-width:inherit">
+            <li data-bind="if: name() != 'A'"><a data-bind="click: ChangeTo.bind($data, 'A')">A に変更</a></li>
+            <li data-bind="if: name() != 'B'"><a data-bind="click: ChangeTo.bind($data, 'B')">B に変更</a></li>
+            <li data-bind="if: name() != '-'"><a data-bind="click: ChangeTo.bind($data, '-')">- に変更</a></li>
+        </ul>
+    </div>
+</div>
+ 

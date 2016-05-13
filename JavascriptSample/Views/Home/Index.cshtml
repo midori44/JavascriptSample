@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "JQuery";
+}
+@section Scripts {
+    <script src="~/Scripts/scriptJQuery.js"></script>
+
+}
+
+<h2>@ViewBag.Title</h2>
+<div>
+    <label>A:</label><span id="A">0</span>
+    <label>B:</label><span id="B">0</span>
+</div>
+<div>
+    @for (int i = 0; i < 10; i++)
+    {
+        <div id="@i" class="btn-group btn-group-sm">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width:40px">
+                - <span class="caret"></span>
+            </button>
+            <ul class="update dropdown-menu" style="min-width:inherit">
+                <li><a data-id="@i" data-val="A" data-now="-">A に変更</a></li>
+                <li><a data-id="@i" data-val="B" data-now="-">B に変更</a></li>
+            </ul>
+        </div>
+    }
+</div>
