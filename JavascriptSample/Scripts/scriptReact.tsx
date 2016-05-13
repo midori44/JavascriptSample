@@ -86,8 +86,8 @@ const counterApp = Redux.combineReducers({ counter });
 
 // View (Reactコンポーネント)
 interface AppProps {
-    counter?: Counter;
     dispatch?: Redux.Dispatch;
+    counter?: Counter;
 }
 class App extends React.Component<AppProps, any> {
     render() {
@@ -98,64 +98,33 @@ class App extends React.Component<AppProps, any> {
                     <label>A: </label><span>{counter.count.A} </span>
                     <label>B: </label><span>{counter.count.B} </span>
                 </div>
-                <ButtonList buttons={counter.buttons} dispatch={dispatch} />
+                {
+                    counter.buttons.map((button, index) =>
+                        <span key={index}>
+                            <div className="btn-group btn-group-sm">
+                                <button className={ button.btnClass() } data-toggle="dropdown" style={{ width: "40px" }}>
+                                    <span>{ button.name }</span> <span className="caret"></span>
+                                </button>
+                                <ul className="dropdown-menu" style={{ minWidth: "inherit" }}>
+                                    <li className={ button.name == "A" ? "hidden" : "" }>
+                                        <a onClick={ () => dispatch(changeTo(button, "A")) }>A に変更</a>
+                                    </li>
+                                    <li className={ button.name == "B" ? "hidden" : "" }>
+                                        <a onClick={ () => dispatch(changeTo(button, "B")) }>B に変更</a>
+                                    </li>
+                                    <li className={ button.name == "-" ? "hidden" : "" }>
+                                        <a onClick={ () => dispatch(changeTo(button, "-")) }>- に変更</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <span> </span>
+                        </span>
+                    )
+                }
             </div>
         );
     }
 }
-
-
-interface ButtonListProps {
-    dispatch?: Redux.Dispatch;
-    buttons?: Btn[];
-}
-class ButtonList extends React.Component<ButtonListProps, any> {
-    render() {
-        const { dispatch, buttons } = this.props;
-        if (buttons) {
-            var ButtonNodes = buttons.map(
-                b => <Button key={b.index} button={b} dispatch={dispatch} />
-            );
-        }
-
-        return (
-            <div>
-                {ButtonNodes}
-            </div>
-        );
-    }
-};
-interface ButtonProps {
-    dispatch?: Redux.Dispatch;
-    button: Btn;
-}
-class Button extends React.Component<ButtonProps, any>{
-    render() {
-        const { dispatch, button } = this.props;
-        return (
-            <span>
-                <div className="btn-group btn-group-sm">
-                    <button className={ button.btnClass() } data-toggle="dropdown" style={{ width: "40px" }}>
-                        <span>{ button.name }</span> <span className="caret"></span>
-                    </button>
-                    <ul className="dropdown-menu" style={{ minWidth: "inherit" }}>
-                        <li className={ button.name == "A" ? "hidden" : "" }>
-                            <a onClick={ () => dispatch(changeTo(button, "A")) }>A に変更</a>
-                        </li>
-                        <li className={ button.name == "B" ? "hidden" : "" }>
-                            <a onClick={ () => dispatch(changeTo(button, "B")) }>B に変更</a>
-                        </li>
-                        <li className={ button.name == "-" ? "hidden" : "" }>
-                            <a onClick={ () => dispatch(changeTo(button, "-")) }>- に変更</a>
-                        </li>
-                    </ul>
-                </div>
-                <span> </span>
-            </span>
-        );
-    }
-}
-
 
 // Container
 interface AppState {

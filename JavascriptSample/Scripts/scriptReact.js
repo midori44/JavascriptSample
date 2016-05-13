@@ -93,35 +93,11 @@ var App = (function (_super) {
     }
     App.prototype.render = function () {
         var _a = this.props, dispatch = _a.dispatch, counter = _a.counter;
-        return (React.createElement("div", null, React.createElement("div", null, React.createElement("label", null, "A: "), React.createElement("span", null, counter.count.A, " "), React.createElement("label", null, "B: "), React.createElement("span", null, counter.count.B, " ")), React.createElement(ButtonList, {buttons: counter.buttons, dispatch: dispatch})));
+        return (React.createElement("div", null, React.createElement("div", null, React.createElement("label", null, "A: "), React.createElement("span", null, counter.count.A, " "), React.createElement("label", null, "B: "), React.createElement("span", null, counter.count.B, " ")), counter.buttons.map(function (button, index) {
+            return React.createElement("span", {key: index}, React.createElement("div", {className: "btn-group btn-group-sm"}, React.createElement("button", {className: button.btnClass(), "data-toggle": "dropdown", style: { width: "40px" }}, React.createElement("span", null, button.name), " ", React.createElement("span", {className: "caret"})), React.createElement("ul", {className: "dropdown-menu", style: { minWidth: "inherit" }}, React.createElement("li", {className: button.name == "A" ? "hidden" : ""}, React.createElement("a", {onClick: function () { return dispatch(changeTo(button, "A")); }}, "A に変更")), React.createElement("li", {className: button.name == "B" ? "hidden" : ""}, React.createElement("a", {onClick: function () { return dispatch(changeTo(button, "B")); }}, "B に変更")), React.createElement("li", {className: button.name == "-" ? "hidden" : ""}, React.createElement("a", {onClick: function () { return dispatch(changeTo(button, "-")); }}, "- に変更")))), React.createElement("span", null, " "));
+        })));
     };
     return App;
-}(React.Component));
-var ButtonList = (function (_super) {
-    __extends(ButtonList, _super);
-    function ButtonList() {
-        _super.apply(this, arguments);
-    }
-    ButtonList.prototype.render = function () {
-        var _a = this.props, dispatch = _a.dispatch, buttons = _a.buttons;
-        if (buttons) {
-            var ButtonNodes = buttons.map(function (b) { return React.createElement(Button, {key: b.index, button: b, dispatch: dispatch}); });
-        }
-        return (React.createElement("div", null, ButtonNodes));
-    };
-    return ButtonList;
-}(React.Component));
-;
-var Button = (function (_super) {
-    __extends(Button, _super);
-    function Button() {
-        _super.apply(this, arguments);
-    }
-    Button.prototype.render = function () {
-        var _a = this.props, dispatch = _a.dispatch, button = _a.button;
-        return (React.createElement("span", null, React.createElement("div", {className: "btn-group btn-group-sm"}, React.createElement("button", {className: button.btnClass(), "data-toggle": "dropdown", style: { width: "40px" }}, React.createElement("span", null, button.name), " ", React.createElement("span", {className: "caret"})), React.createElement("ul", {className: "dropdown-menu", style: { minWidth: "inherit" }}, React.createElement("li", {className: button.name == "A" ? "hidden" : ""}, React.createElement("a", {onClick: function () { return dispatch(changeTo(button, "A")); }}, "A に変更")), React.createElement("li", {className: button.name == "B" ? "hidden" : ""}, React.createElement("a", {onClick: function () { return dispatch(changeTo(button, "B")); }}, "B に変更")), React.createElement("li", {className: button.name == "-" ? "hidden" : ""}, React.createElement("a", {onClick: function () { return dispatch(changeTo(button, "-")); }}, "- に変更")))), React.createElement("span", null, " ")));
-    };
-    return Button;
 }(React.Component));
 function select(state) {
     return {
