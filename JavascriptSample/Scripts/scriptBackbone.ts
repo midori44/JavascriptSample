@@ -1,116 +1,167 @@
-﻿class Task extends Backbone.Model {
-    defaults(): Backbone.ObjectHash {
-        return {
-            title: '',
-            closed: false
-        }
+﻿class BbButton extends Backbone.Model {
+    public name: string;
+    public id: number;
+    public cname: string;
+    constructor(_name: string = "-", _id: number = 0) {
+        super();
+        this.name = _name;
+        this.id = _id;
+        this.cname = "btn-default";
     }
-    validate(attrs: any): any {
-        if (_.isEmpty(attrs.title)) {
-            return 'タスク名が指定されてません';
+
+    getClassName(): string {
+        switch (this.name) {
+            case "A":
+                return "btn-success";
+            case "B":
+                return "btn-primary";
+            case "-":
+                return "btn-default";
         }
     }
 };
 //-----------------------------
 // コレクション
 //-----------------------------
-class Tasks extends Backbone.Collection<Task> {
-    model = Task;
-    //localStorage(): any {
-    //    return new Store('backbone-local-storage-task')
-    //}
+class BbButtonList extends Backbone.Collection<BbButton> {
+    model = BbButton;
 };
-// ビュー（リストアイテム部分）
-class TaskView extends Backbone.View<Task> {
-    tagName: string = 'li';
+
+class ItemView extends Backbone.View<BbButton>{
+    //tagName = 'li'; // name of tag to be created        
+    // `ItemView`s now respond to two clickable actions for each `Item`: swap and delete.
     events(): Backbone.EventsHash {
         return {
-            'click .toggle': this.toggleTask,
-            'click .del': this.delTask
+            'click a.toA': this.toA,
+            'click a.toB': this.remove,
+            'click a.toN': this.remove,
+        }
+    }
+    // `initialize()` now binds model change/removal to the corresponding handlers below.
+    initialize(): void {
+        _.bindAll(this, 'render', 'unrender', 'swap', 'remove'); // every function that uses 'this' as the current object should be in here
+
+        this.model.bind('change', this.render);
+        this.model.bind('remove', this.unrender);
+    }
+    // `render()` now includes two extra `span`s corresponding to the actions swap and delete.
+    template = _.template($('#button-template').html());
+    render(): ItemView {
+
+        //console.log($(this.el).html());
+        //console.log(this.template());
+        this.model.cname = this.model.getClassName();
+        $(this.el).append(this.template(this.model));
+
+        //$(this.el).html('<span style="color:black;">' + this.model.id + ' ' + this.model.name + '</span> &nbsp; &nbsp; <span class="swap" style="font-family:sans-serif; color:blue; cursor:pointer;">[swap]</span> <span class="delete" style="cursor:pointer; color:red; font-family:sans-serif;">[delete]</span>');
+        return this; // for chainable calls, like .render().el
+    }
+    toA(): void {
+        taskApp.counter++;
+    }
+
+
+    // `unrender()`: Makes Model remove itself from the DOM.
+    unrender(): void {
+        $(this.el).remove();
+    }
+    // `swap()` will interchange an `Item`'s attributes. When the `.set()` model function is called, the event `change` will be triggered.
+    swap(): void {
+        var swapped = {
+            id: this.model.id + 1,
+            name: this.model.name + "!"
+        };
+        this.model.set(swapped);
+    }
+    // `remove()`: We use the method `destroy()` to remove a model from its collection. Normally this would also delete the record from its persistent storage, but we have overridden that (see above).
+    remove(): any {
+        this.model.destroy();
+    }
+}
+
+// ビュー（リストアイテム部分）
+class TaskView extends Backbone.View<BbButton> {
+    counter: number;
+    events(): Backbone.EventsHash {
+        return {
+            'click .toA': this.toggleTask,
+            'click button#add': 'addItem'
         }
     }
     initialize(): void {
-        this.model.on('destroy', this.remove, this);
-        this.model.on('change', this.render, this); // (1)
+        _.bindAll(this, 'render', 'addItem', 'appendItem');
+
+        for (let i = 0; i < 10; i++) {
+            this.collection.add(new BbButton("-", i));
+        }
+        this.collection.bind('add', this.appendItem);
+
+        this.counter = 0;
+        this.render();      
     }
-    template = _.template($('#temp-taskItem').html()); // (2)
+    template = _.template($('#button-template').html());
     render(): TaskView {
-        let html: string = this.template(this.model.toJSON());
-        this.$el.html(html)[
-            this.model.get('closed') ? 'addClass' : 'removeClass'
-        ]('closed');
+        let self = this;
+        //$(this.el).append("<button id='add'>Add list item</button>");
+        //$(this.el).append("<ul></ul>");
+        //$(this.el).append("<div></div>");
+        _(this.collection.models).each(function (item) { // in case collection is not empty
+            self.appendItem(item);
+        }, this);
+
         return this;
     }
-    toggleTask(): void {
-        this.model.set('closed', !this.model.get('closed')).save();
-    }
-    delTask(e: any): void {
+    toggleTask(e: any): void {
         e.preventDefault();
-        this.model.destroy();
+        console.log(this);
+    }
+
+    addItem(): void {
+        this.counter++;
+        var item = new BbButton();
+        console.log(item);
+        item.set({
+            name: item.get('name') + this.counter, // modify item defaults
+            className: "x"
+        });
+        console.log(item);
+        this.collection.add(item); // add item to collection; view is updated via event 'add'
+    }
+
+    appendItem(item: BbButton): void {
+        //item.id = this.counter;
+        //item.cname = "x";
+        var itemView = new ItemView({
+            model: item,
+            el: "div#buttons"
+        });
+        console.log(item);
+        $(this.el).append(itemView.render().el);
+        //$('ul', this.el).append("<li>" + item.name + " " + this.counter + "</li>");
     }
 };
 // ビュー（画面全体）
-class TaskApp extends Backbone.View<Task>{
-    $title: JQuery;
-    $list: JQuery;
-    $error: JQuery;
-
+class TaskApp extends Backbone.View<BbButton>{
+    initialize(): void {
+        var taskView = new TaskView({
+            el: $('#buttons'),
+            collection: new BbButtonList()
+        });
+        this.$el.append(taskView.render().el);
+        //this.collection.fetch();
+    }
     events(): Backbone.EventsHash {
         return {
             'click .item': this.getTask
         }
     }
-    initialize(): void {
-        this.$title = this.$el.find('input.title');
-        this.$list = this.$el.find('ul.taskList');
-        this.$error = this.$el.find('.error');
-
-        let self: TaskApp = this;
-        this.collection.on('add', function (task) {
-            let taskView = new TaskView({ model: task });
-            self.$list.prepend(taskView.render().el)
-        })
-        this.collection.fetch();
-        this.collection.on("invalid", function (task, error) { // (3)
-            self.$error.text(error);
-        });
-    }
-    addTask(e: any): void {
-        e.preventDefault();
-        let sts = this.collection.create(
-            { title: this.$title.val() },
-            { validate: true }
-        );
-        if (sts) {
-            this.$title.val('')
-            this.$error.text('');
-        }
-    }
     getTask(e: any): void {
         e.preventDefault();
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            data: "",
-            url: "/home/api",
-            cache: false,
-            success: (data: any) => {
-                console.log(data);
-                let sts = this.collection.create(
-                    { title: data.name },
-                    { validate: true }
-                );
-            }
-        });
-    }
-    clearTask(): void {
-        let tasks = this.collection;
-        tasks.each(function (task) {
-            tasks.first().destroy();
-        });
+        console.log(this.collection.length);
     }
 };
-var taskApp = new TaskApp({
-    el: $('div.taskApp'),
-    collection: new Tasks()
+
+var taskApp = new TaskView({
+    el: $('#content'),
+    collection: new BbButtonList()
 });

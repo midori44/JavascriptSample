@@ -29,14 +29,14 @@ namespace JavascriptSample.Controllers
 
 
 
-        public ActionResult About()
+        public ActionResult Backbone()
         {
             ViewBag.Message = "Your application description page.";
 
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Knockout()
         {
             ViewBag.Message = "Your contact page.";
 

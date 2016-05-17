@@ -218,12 +218,18 @@
     <Content Include="Scripts\knockout-3.4.0.debug.js" />
     <Content Include="Scripts\knockout-3.4.0.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\react-bundle.js" />
+    <Content Include="Scripts\react-bundle.min.js" />
     <Content Include="Scripts\react-dom.js" />
     <Content Include="Scripts\react.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\scriptBackbone.js" />
+    <Content Include="Scripts\scriptJQuery.js" />
+    <Content Include="Scripts\scriptKnockout.js" />
+    <Content Include="Scripts\scriptReact.js" />
     <Content Include="Scripts\Tutorial.jsx" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="Scripts\underscore.min.js" />
@@ -239,8 +245,8 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Backbone.cshtml" />
+    <Content Include="Views\Home\Knockout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -264,6 +270,10 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Scripts\underscore.min.map" />
     <Content Include="Views\Home\React.cshtml" />
+    <Content Include="Scripts\scriptBackbone.js.map" />
+    <Content Include="Scripts\scriptJQuery.js.map" />
+    <Content Include="Scripts\scriptKnockout.js.map" />
+    <Content Include="Scripts\scriptReact.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
