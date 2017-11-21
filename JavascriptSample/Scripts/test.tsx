@@ -1,6 +1,9 @@
 ﻿import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
+class Test {
+}
+
 interface CommentFormProps {
     author: string;
     text: string;
