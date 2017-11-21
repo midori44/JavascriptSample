@@ -1,15 +1,26 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var React = require('react');
-var ReactDOM = require('react-dom');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = require("react");
+var ReactDOM = require("react-dom");
+var Test = (function () {
+    function Test() {
+    }
+    return Test;
+}());
 var CommentForm = (function (_super) {
     __extends(CommentForm, _super);
     function CommentForm() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     CommentForm.prototype.handleSubmit = function (e) {
         e.preventDefault();
@@ -24,16 +35,21 @@ var CommentForm = (function (_super) {
         return;
     };
     CommentForm.prototype.render = function () {
-        return (React.createElement("form", {className: "commentForm", onSubmit: this.handleSubmit.bind(this)}, React.createElement("input", {type: "text", placeholder: "Your name", ref: "author"}), React.createElement("input", {type: "text", placeholder: "Say something...", ref: "text"}), React.createElement("input", {type: "submit", value: "Post"})));
+        return (React.createElement("form", { className: "commentForm", onSubmit: this.handleSubmit.bind(this) },
+            React.createElement("input", { type: "text", placeholder: "Your name", ref: "author" }),
+            React.createElement("input", { type: "text", placeholder: "Say something...", ref: "text" }),
+            React.createElement("input", { type: "submit", value: "Post" })));
     };
     return CommentForm;
 }(React.Component));
 var CommentBox = (function (_super) {
     __extends(CommentBox, _super);
     function CommentBox(props) {
+        var _this = this;
         console.log(props);
-        _super.call(this, props);
-        this.state = { data: [] };
+        _this = _super.call(this, props) || this;
+        _this.state = { data: [] };
+        return _this;
     }
     CommentBox.prototype.loadCommentsFromServer = function () {
         var _this = this;
@@ -66,7 +82,10 @@ var CommentBox = (function (_super) {
         });
     };
     CommentBox.prototype.render = function () {
-        return (React.createElement("div", {className: "commentBox"}, React.createElement("h1", null, "Comments"), React.createElement(CommentList, {data: this.state.data}), React.createElement(CommentForm, {onCommentSubmit: this.handleCommentSubmit.bind(this)})));
+        return (React.createElement("div", { className: "commentBox" },
+            React.createElement("h1", null, "Comments"),
+            React.createElement(CommentList, { data: this.state.data }),
+            React.createElement(CommentForm, { onCommentSubmit: this.handleCommentSubmit.bind(this) })));
     };
     return CommentBox;
 }(React.Component));
@@ -74,13 +93,13 @@ var CommentBox = (function (_super) {
 var CommentList = (function (_super) {
     __extends(CommentList, _super);
     function CommentList() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     CommentList.prototype.render = function () {
         var commentNodes = this.props.data.map(function (comment) {
-            return (React.createElement(CommentItem, {author: comment.author, key: comment.id}, comment.text));
+            return (React.createElement(CommentItem, { author: comment.author, key: comment.id }, comment.text));
         });
-        return (React.createElement("div", {className: "commentList"}, commentNodes));
+        return (React.createElement("div", { className: "commentList" }, commentNodes));
     };
     return CommentList;
 }(React.Component));
@@ -88,10 +107,12 @@ var CommentList = (function (_super) {
 var CommentItem = (function (_super) {
     __extends(CommentItem, _super);
     function CommentItem() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     CommentItem.prototype.render = function () {
-        return (React.createElement("div", {className: "comment"}, React.createElement("h2", {className: "commentAuthor"}, this.props.author), this.props.children));
+        return (React.createElement("div", { className: "comment" },
+            React.createElement("h2", { className: "commentAuthor" }, this.props.author),
+            this.props.children));
     };
     return CommentItem;
 }(React.Component));
@@ -99,5 +120,5 @@ var data = [
     { id: 1, author: "Pete Hunt!!", text: "This is one comment!!!" },
     { id: 2, author: "Jordan Walke!!", text: "This is *another* comment!!!" }
 ];
-ReactDOM.render(React.createElement(CommentBox, {url: "/home/api", pollInterval: 200000}), document.getElementById('content'));
+ReactDOM.render(React.createElement(CommentBox, { url: "/home/api", pollInterval: 200000 }), document.getElementById('content'));
 //# sourceMappingURL=test.js.map
