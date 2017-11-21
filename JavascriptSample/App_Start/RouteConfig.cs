@@ -9,6 +9,8 @@ namespace JavascriptSample
 {
     public class RouteConfig
     {
+        public const string TEST = "test";
+
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
